@@ -135,16 +135,16 @@ export default class APP extends Component {
         text = text.replace(/\b\w/g, function (l) { return l.toUpperCase() })
 
         // dia 02
-        let icon_2 = retorno.data.forecast.forecastday[1].condition.icon;
+        let icon_2 = retorno.data.forecast.forecastday[1].day.condition.icon;
         let max_temp_2 = retorno.data.forecast.forecastday[1].day.maxtemp_c;
         let min_temp_2 = retorno.data.forecast.forecastday[1].day.mintemp_c;
         let aux_sunset_2 = retorno.data.forecast.forecastday[1].astro.sunset;
         let aux_sunrise_2 = retorno.data.forecast.forecastday[1].astro.sunrise;
-        let code_2 = retorno.data.forecastday[1].condition.code;
+        let code_2 = retorno.data.forecast.forecastday[1].day.condition.code;
         let sunset_2 = moment(aux_sunset_2, 'h:mm A').format('HH:mm');
         let sunrise_2 = moment(aux_sunrise_2, 'h:mm A').format('HH:mm');
 
-        let i, text_2;
+        let text_2;
         for (i = 0; i < 48; i++) {
             let aux = texto.data[i].code;
             if (code_2 === aux) {
@@ -155,16 +155,16 @@ export default class APP extends Component {
 
 
         // dia 03
-        let icon_3 = retorno.data.forecast.forecastday[2].condition.icon;
+        let icon_3 = retorno.data.forecast.forecastday[2].day.condition.icon;
         let max_temp_3 = retorno.data.forecast.forecastday[2].day.maxtemp_c;
         let min_temp_3 = retorno.data.forecast.forecastday[2].day.mintemp_c;
         let aux_sunset_3 = retorno.data.forecast.forecastday[2].astro.sunset;
         let aux_sunrise_3 = retorno.data.forecast.forecastday[2].astro.sunrise;
-        let code_3 = retorno.data.forecastday[2].condition.code;
+        let code_3 = retorno.data.forecast.forecastday[2].day.condition.code;
         let sunset_3 = moment(aux_sunset_3, 'h:mm A').format('HH:mm');
         let sunrise_3 = moment(aux_sunrise_3, 'h:mm A').format('HH:mm');
 
-        let i, text_3;
+        let text_3;
         for (i = 0; i < 48; i++) {
             let aux = texto.data[i].code;
             if (code_3 === aux) {
@@ -175,16 +175,16 @@ export default class APP extends Component {
 
 
         // dia 04
-        let icon_4 = retorno.data.forecast.forecastday[3].condition.icon;
+        let icon_4 = retorno.data.forecast.forecastday[3].day.condition.icon;
         let max_temp_4 = retorno.data.forecast.forecastday[3].day.maxtemp_c;
         let min_temp_4 = retorno.data.forecast.forecastday[3].day.mintemp_c;
         let aux_sunset_4 = retorno.data.forecast.forecastday[3].astro.sunset;
         let aux_sunrise_4 = retorno.data.forecast.forecastday[3].astro.sunrise;
-        let code_4 = retorno.data.forecastday[3].condition.code;
+        let code_4 = retorno.data.forecast.forecastday[3].day.condition.code;
         let sunset_4 = moment(aux_sunset_4, 'h:mm A').format('HH:mm');
         let sunrise_4 = moment(aux_sunrise_4, 'h:mm A').format('HH:mm');
 
-        let i, text_4;
+        let text_4;
         for (i = 0; i < 48; i++) {
             let aux = texto.data[i].code;
             if (code_4 === aux) {
