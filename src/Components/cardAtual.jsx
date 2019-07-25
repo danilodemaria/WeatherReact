@@ -17,11 +17,11 @@ export default function CardAtual(props) {
         <div>
           <div className="row justify-content-center">
             <div className="col-0">
-              <img src={props.weatherCurrent.icon} style={{ width: "120px", height: "120px", fontWeight: "bold" }} />
+              <img src={props.weatherCurrent.icon} alt="." style={{ width: "120px", height: "120px", fontWeight: "bold" }} />
             </div>
             <div className="col-0 text-left align-self-center">
               <h3>
-                <span className="btn btn-outline-dark" style={{ fontWeight: "bold", textTransform: 'capitalize' }}>
+                <span className="btn btn-outline-dark" style={{ fontWeight: "bold", textTransform: "capitalize" }}>
                   {props.weatherCurrent.current_temp_c}°C - {props.weatherCurrent.text}
                 </span>
               </h3>
@@ -58,7 +58,6 @@ export default function CardAtual(props) {
             Última Atualização {props.weatherCurrent.date_refresh}
           </small>
         </p>
-
       </div>
     </div>
   );

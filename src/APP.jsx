@@ -4,16 +4,11 @@ import CardAtual from "./Components/cardAtual";
 import CardMoney from "./Components/cardMoney";
 import CardForecast from "./Components/cardForecast";
 
-
 let intervalID = 0;
 let url = "http://api.apixu.com/v1/forecast.json?key=3cb2d33176324796985133100191402&q=-27.192396,-48.498516&days=4";
 let urlTexto = "http://www.apixu.com/doc/conditions.json";
 let formato = { minimumFractionDigits: 3, style: "currency", currency: "BRL" };
 var moment = require("moment");
-
-String.prototype.capitalize = function() {
-  return this.replace(/(?:^|\s)\S/g, function(a) { return a.toUpperCase(); });
-};
 
 export default class APP extends Component {
   state = {
@@ -23,13 +18,12 @@ export default class APP extends Component {
     bitcoin: 0,
     ibovespa: 0,
     hora: 0,
-    texto:0,
+    texto: 0,
     weatherCurrent: {},
     weatherOne: {},
     weatherTwo: {},
     weatherThree: {}
   };
-
 
   getTime = () => {
     setInterval(() => {
@@ -47,12 +41,13 @@ export default class APP extends Component {
 
   getData = async () => {
     const retorno = await axios.get("https://api.hgbrasil.com/finance/quotations?format=json-cors&key=25bcb38");
-    let dolar = retorno.data.results.currencies.USD.buy.toLocaleString('pt-BR', formato);
-    let euro = retorno.data.results.currencies.EUR.buy.toLocaleString('pt-BR', formato);
-    let peso = retorno.data.results.currencies.ARS.buy.toLocaleString('pt-BR', formato);
-    let bitcoin = retorno.data.results.currencies.BTC.buy.toLocaleString('pt-BR', formato);
-    let ibovespa = retorno.data.results.stocks.IBOVESPA.points;    
-    
+    console.log(retorno);
+    let dolar = retorno.data.results.currencies.USD.buy.toLocaleString("pt-BR", formato);
+    let euro = retorno.data.results.currencies.EUR.buy.toLocaleString("pt-BR", formato);
+    let peso = retorno.data.results.currencies.ARS.buy.toLocaleString("pt-BR", formato);
+    let bitcoin = retorno.data.results.currencies.BTC.buy.toLocaleString("pt-BR", formato);
+    let ibovespa = retorno.data.results.stocks.IBOVESPA.points;
+
     this.setState({ dolar, euro, peso, bitcoin, ibovespa });
   };
 
@@ -104,7 +99,7 @@ export default class APP extends Component {
     var look = new Date();
     let d = moment([]);
     d = moment(d).format("DD/MM/YYYY");
-    let day0 = d +semana[look.getDay()];
+    let day0 = d + semana[look.getDay()];
     let current_temp_c = retorno.data.current.temp_c;
     let wind = retorno.data.current.wind_kph;
     let humidity = retorno.data.current.humidity;
@@ -121,17 +116,16 @@ export default class APP extends Component {
     let min_temp = retorno.data.forecast.forecastday[0].day.mintemp_c;
     let is_day = retorno.data.current.is_day;
     let moonrise;
-    if(aux_moonrise === 'No moonrise'){
-      moonrise = 'N/A';
-    }else{
+    if (aux_moonrise === "No moonrise") {
+      moonrise = "N/A";
+    } else {
       moonrise = moment(aux_moonrise, "h:mm A").format("HH:mm");
     }
     let date_refresh = moment(aux_data).format("DD/MM/YYYY HH:mm");
     let sunset = moment(aux_sunset, "h:mm A").format("HH:mm");
     let sunrise = moment(aux_sunrise, "h:mm A").format("HH:mm");
     let moonset = moment(aux_moonset, "h:mm A").format("HH:mm");
-    
-    
+
     dirwind = this.converte(dirwind);
     let i;
     const texto = await axios.get(urlTexto);
@@ -148,16 +142,16 @@ export default class APP extends Component {
       }
     }
 
-    text = text.replace(/\b\w/g, function (l) {
+    text = text.replace(/\b\w/g, function(l) {
       return l.toUpperCase();
     });
 
     // dia 02
-    
+
     d = moment([]);
-    d.add(1,'days');
+    d.add(1, "days");
     d = moment(d).format("DD/MM/YYYY");
-    let day1 = 'AMANHÃ -' +d;
+    let day1 = "AMANHÃ -" + d;
     let icon_2 = retorno.data.forecast.forecastday[1].day.condition.icon;
     let max_temp_2 = retorno.data.forecast.forecastday[1].day.maxtemp_c;
     let min_temp_2 = retorno.data.forecast.forecastday[1].day.mintemp_c;
@@ -174,13 +168,13 @@ export default class APP extends Component {
         text_2 = texto.data[i].languages[20].day_text;
       }
     }
-    text_2 = text_2.replace(/\b\w/g, function (l) {
+    text_2 = text_2.replace(/\b\w/g, function(l) {
       return l;
     });
 
-    // dia 03    
+    // dia 03
     d = moment([]);
-    d.add(2,'days');
+    d.add(2, "days");
     d = moment(d).format("DD/MM/YYYY");
     let day2 = d;
     let icon_3 = retorno.data.forecast.forecastday[2].day.condition.icon;
@@ -199,13 +193,13 @@ export default class APP extends Component {
         text_3 = texto.data[i].languages[20].day_text;
       }
     }
-    text_3 = text_3.replace(/\b\w/g, function (l) {
+    text_3 = text_3.replace(/\b\w/g, function(l) {
       return l.toUpperCase();
     });
 
     // dia 04
     d = moment([]);
-    d.add(3,'days');
+    d.add(3, "days");
     d = moment(d).format("DD/MM/YYYY");
     let day3 = d;
     let icon_4 = retorno.data.forecast.forecastday[3].day.condition.icon;
@@ -224,7 +218,7 @@ export default class APP extends Component {
         text_4 = texto.data[i].languages[20].day_text;
       }
     }
-    text_4 = text_4.replace(/\b\w/g, function (l) {
+    text_4 = text_4.replace(/\b\w/g, function(l) {
       return l.toUpperCase();
     });
 
@@ -246,20 +240,47 @@ export default class APP extends Component {
         moonset,
         moonrise,
         is_day,
-        data : day0
+        data: day0
       }
     });
 
     this.setState({
-      weatherOne: { icone: icon_2, max: max_temp_2, min: min_temp_2, code: code_2, sunset: sunset_2, sunrise: sunrise_2, text: text_2, data : day1 }
+      weatherOne: {
+        icone: icon_2,
+        max: max_temp_2,
+        min: min_temp_2,
+        code: code_2,
+        sunset: sunset_2,
+        sunrise: sunrise_2,
+        text: text_2,
+        data: day1
+      }
     });
 
     this.setState({
-      weatherTwo: { icone: icon_3, max: max_temp_3, min: min_temp_3, code: code_3, sunset: sunset_3, sunrise: sunrise_3, text: text_3,data:day2 }
+      weatherTwo: {
+        icone: icon_3,
+        max: max_temp_3,
+        min: min_temp_3,
+        code: code_3,
+        sunset: sunset_3,
+        sunrise: sunrise_3,
+        text: text_3,
+        data: day2
+      }
     });
 
     this.setState({
-      weatherThree: { icone: icon_4, max: max_temp_4, min: min_temp_4, code: code_4, sunset: sunset_4, sunrise: sunrise_4, text: text_4,data : day3 }
+      weatherThree: {
+        icone: icon_4,
+        max: max_temp_4,
+        min: min_temp_4,
+        code: code_4,
+        sunset: sunset_4,
+        sunrise: sunrise_4,
+        text: text_4,
+        data: day3
+      }
     });
   };
 
@@ -274,18 +295,18 @@ export default class APP extends Component {
     clearInterval(intervalID);
   }
 
-  clicado =(e)=>{
+  clicado = e => {
     console.log(e.target.value);
-  }
+  };
 
   render() {
     return (
-      <div class="card bg-white text-black">
-        <div className="row font-weight-bold">
+      <div className="card bg-white text-black">
+        <div className="row font-weight-bold no-gutters">
           <CardAtual weatherCurrent={this.state.weatherCurrent} onClick={this.clicado} />
-          <CardMoney geral={this.state}/>
+          <CardMoney geral={this.state} />
         </div>
-        <div className='row' style={{ marginLeft: '0px', marginRight: '0px', lineHeight:'$lh' }}>
+        <div className="row" style={{ marginLeft: "0px", marginRight: "0px", lineHeight: "$lh" }}>
           <CardForecast weatherOne={this.state.weatherOne} />
           <CardForecast weatherOne={this.state.weatherTwo} />
           <CardForecast weatherOne={this.state.weatherThree} />
