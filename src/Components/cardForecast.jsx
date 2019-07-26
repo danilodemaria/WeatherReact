@@ -13,15 +13,15 @@ export default function CardForecast(props) {
               {props.weatherOne.data}
             </h5>
             <p className="card-text" style={{ fontWeight: "bold" }}>
-              <label>Máx: {props.weatherOne.max} ºC</label>
+              <label className= "textForecast" >Máx: {props.weatherOne.max} ºC</label>
               <br />
-              <label>Mín: {props.weatherOne.min} ºC</label>
+              <label className= "textForecast">Mín: {props.weatherOne.min} ºC</label>
               <br />
-              <label>{props.weatherOne.text}</label>
+              <label className= "textForecast">Nascer do Sol: {props.weatherOne.sunrise}</label>
               <br />
-              <label>Nascer do Sol: {props.weatherOne.sunrise}</label>
+              <label className= "textForecast" >Pôr do Sol: {props.weatherOne.sunset}</label>
               <br />
-              <label>Pôr do Sol: {props.weatherOne.sunset}</label>
+              <label className= "textForecast">{props.weatherOne.text}</label>          
             </p>
           </div>
         </div>

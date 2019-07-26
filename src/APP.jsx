@@ -3,12 +3,15 @@ import axios from "axios";
 import CardAtual from "./Components/cardAtual";
 import CardMoney from "./Components/cardMoney";
 import CardForecast from "./Components/cardForecast";
+import moment from "moment";
+import 'moment/min/locales';
 
 let intervalID = 0;
 let url = "http://api.apixu.com/v1/forecast.json?key=3cb2d33176324796985133100191402&q=-27.192396,-48.498516&days=4";
 let urlTexto = "http://www.apixu.com/doc/conditions.json";
 let formato = { minimumFractionDigits: 3, style: "currency", currency: "BRL" };
-var moment = require("moment");
+
+moment.locale("pt-BR");
 
 export default class APP extends Component {
   state = {
@@ -28,7 +31,9 @@ export default class APP extends Component {
   getTime = () => {
     setInterval(() => {
       let d = new Date();
-      this.setState({ hora: d.toLocaleTimeString() });
+      d = d.toLocaleTimeString() ;      
+      d = moment().format("HH:mm");       
+      this.setState({ hora: d});
     }, 1000);
   };
 
@@ -41,7 +46,6 @@ export default class APP extends Component {
 
   getData = async () => {
     const retorno = await axios.get("https://api.hgbrasil.com/finance/quotations?format=json-cors&key=25bcb38");
-    console.log(retorno);
     let dolar = retorno.data.results.currencies.USD.buy.toLocaleString("pt-BR", formato);
     let euro = retorno.data.results.currencies.EUR.buy.toLocaleString("pt-BR", formato);
     let peso = retorno.data.results.currencies.ARS.buy.toLocaleString("pt-BR", formato);
@@ -95,11 +99,10 @@ export default class APP extends Component {
     const retorno = await axios.get(url);
     let text;
     // dia atual
-    var semana = [" - Domingo", " - Segunda-Feira", " - Terça-Feira", " - Quarta-Feira", " - Quinta-Feira", " - Sexta-Feira", " - Sábado"];
-    var look = new Date();
-    let d = moment([]);
-    d = moment(d).format("DD/MM/YYYY");
-    let day0 = d + semana[look.getDay()];
+    let d;
+    d = moment(d).format("DD/MM/YYYY");    
+    console.log(moment(d, 'DD/MM/YYYY').format("dddd"));
+    let day0 = moment(d, 'DD/MM/YYYY').format("dddd");
     let current_temp_c = retorno.data.current.temp_c;
     let wind = retorno.data.current.wind_kph;
     let humidity = retorno.data.current.humidity;

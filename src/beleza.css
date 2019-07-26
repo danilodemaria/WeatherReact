@@ -1,0 +1,11 @@
+@font-face { font-family: digital-7; src: url('./fonts/digital-7.ttf'); }
+
+.relogioHoras {
+    font-size: 130px;
+    padding: 0 10px 0 10px !important;
+    font-family:"digital-7";
+}
+
+.textForecast {
+    margin-bottom: 0.0rem;
+}
