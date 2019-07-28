@@ -16,24 +16,24 @@ const CardMoney = props => {
             <div>
               <h4>
                 <span className="btn btn-outline-dark" style={{ fontWeight: "bold" }}>
-                  Dolar: R$ {props.geral.dolar}
+                  Dolar: {props.geral.dolar}
                 </span>
               </h4>
               <h4>
                 <span className="btn btn-outline-dark" style={{ fontWeight: "bold" }}>
-                  Peso: R$ {props.geral.peso}
+                  Peso: {props.geral.peso}
                 </span>
               </h4>
             </div>
             <div>
               <h4>
                 <span className="btn btn-outline-dark" style={{ fontWeight: "bold" }}>
-                  Euro R$ {props.geral.euro}
+                  Euro {props.geral.euro}
                 </span>
               </h4>
               <h4>
                 <span className="btn btn-outline-dark" style={{ fontWeight: "bold" }}>
-                  Bitcoin: R$ {props.geral.bitcoin}
+                  Bitcoin: {props.geral.bitcoin}
                 </span>
               </h4>
             </div>

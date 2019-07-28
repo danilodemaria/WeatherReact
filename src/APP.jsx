@@ -45,7 +45,7 @@ export default class APP extends Component {
   };
 
   getData = async () => {
-    const retorno = await axios.get("https://api.hgbrasil.com/finance/quotations?format=json-cors&key=25bcb38");
+    const retorno = await axios.get("https://api.hgbrasil.com/finance/quotations?format=json-cors&key=eddd9833");
     let dolar = retorno.data.results.currencies.USD.buy.toLocaleString("pt-BR", formato);
     let euro = retorno.data.results.currencies.EUR.buy.toLocaleString("pt-BR", formato);
     let peso = retorno.data.results.currencies.ARS.buy.toLocaleString("pt-BR", formato);
