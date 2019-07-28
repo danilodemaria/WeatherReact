@@ -7,8 +7,11 @@ import moment from "moment";
 import 'moment/min/locales';
 
 let intervalID = 0;
-let url = "http://api.apixu.com/v1/forecast.json?key=3cb2d33176324796985133100191402&q=-27.192396,-48.498516&days=4";
+let keyMoney = "c55e6599";
+let keyWeather = "3cb2d33176324796985133100191402";
+let url = "http://api.apixu.com/v1/forecast.json?key="+keyWeather+"&q=-27.192396,-48.498516&days=4";
 let urlTexto = "http://www.apixu.com/doc/conditions.json";
+let urlMoney = "https://api.hgbrasil.com/finance/quotations?format=json-cors&key="+keyMoney;
 let formato = { minimumFractionDigits: 3, style: "currency", currency: "BRL" };
 
 moment.locale("pt-BR");
@@ -29,6 +32,7 @@ export default class APP extends Component {
   };
 
   getTime = () => {
+    //atualiza estado do relógio a cada segundo
     setInterval(() => {
       let d = new Date();
       d = d.toLocaleTimeString() ;      
@@ -38,6 +42,7 @@ export default class APP extends Component {
   };
 
   getMoney = () => {
+    //Atualiza dados monetários e tempo a cada 30 minutos
     intervalID = setInterval(async () => {
       this.getData();
       this.getWeather();
@@ -45,64 +50,107 @@ export default class APP extends Component {
   };
 
   getData = async () => {
-    const retorno = await axios.get("https://api.hgbrasil.com/finance/quotations?format=json-cors&key=eddd9833");
+    //Requisição para buscar dados monetários, também atualiza os estados das variáveis  
+    const retorno = await axios.get(urlMoney);
     let dolar = retorno.data.results.currencies.USD.buy.toLocaleString("pt-BR", formato);
     let euro = retorno.data.results.currencies.EUR.buy.toLocaleString("pt-BR", formato);
     let peso = retorno.data.results.currencies.ARS.buy.toLocaleString("pt-BR", formato);
     let bitcoin = retorno.data.results.currencies.BTC.buy.toLocaleString("pt-BR", formato);
     let ibovespa = retorno.data.results.stocks.IBOVESPA.points;
-
     this.setState({ dolar, euro, peso, bitcoin, ibovespa });
   };
 
-  converte() {
+  convertWind() {
+    //Traduzindo direção do vento para PT-BR
     let auxDirecao = arguments[0];
-
     if (auxDirecao === "S") {
-      auxDirecao = "VENTO SUL";
+      auxDirecao = "Vento Sul";
     } else if (auxDirecao === "N") {
-      auxDirecao = "VENTO NORTE";
+      auxDirecao = "Vento Norte";
     } else if (auxDirecao === "E") {
-      auxDirecao = "VENTO LESTE";
+      auxDirecao = "Vento Leste";
     } else if (auxDirecao === "W") {
-      auxDirecao = "VENTO OESTE";
+      auxDirecao = "Vento Oeste";
     } else if (auxDirecao === "SSW") {
-      auxDirecao = "VENTO SUDOESTE";
+      auxDirecao = "Vento Sudoeste";
     } else if (auxDirecao === "SW") {
-      auxDirecao = "VENTO SUDOESTE";
+      auxDirecao = "Vento Sudoeste";
     } else if (auxDirecao === "WSW") {
-      auxDirecao = "VENTO SUDOESTE";
+      auxDirecao = "Vento Sudoeste";
     } else if (auxDirecao === "WNW") {
-      auxDirecao = "VENTO NOROESTE";
+      auxDirecao = "Vento Noroeste";
     } else if (auxDirecao === "NW") {
-      auxDirecao = "VENTO NOROESTE";
+      auxDirecao = "Vento Noroeste";
     } else if (auxDirecao === "NNW") {
-      auxDirecao = "VENTO NOROESTE";
+      auxDirecao = "Vento Noroeste";
     } else if (auxDirecao === "NNE") {
-      auxDirecao = "VENTO NORDESTE";
+      auxDirecao = "Vento Nordeste";
     } else if (auxDirecao === "NE") {
-      auxDirecao = "VENTO NORDESTE";
+      auxDirecao = "Vento Nordeste";
     } else if (auxDirecao === "ENE") {
-      auxDirecao = "VENTO NORDESTE";
+      auxDirecao = "Vento Nordeste";
     } else if (auxDirecao === "ESE") {
-      auxDirecao = "VENTO SUDESTE";
+      auxDirecao = "Vento Sudeste";
     } else if (auxDirecao === "SE") {
-      auxDirecao = "VENTO SUDESTE";
+      auxDirecao = "Vento Sudeste";
     } else if (auxDirecao === "SSE") {
-      auxDirecao = "VENTO SUDESTE";
+      auxDirecao = "Vento Sudeste";
     }
-
     return auxDirecao;
   }
 
+  removeAcent() {
+    // Resolvendo erro de acentos nas strings
+    var string = arguments[0];
+    var mapaAcentosHex 	= {
+      a : /[\xE0-\xE6]/g,
+      e : /[\xE8-\xEB]/g,
+      i : /[\xEC-\xEF]/g,
+      o : /[\xF2-\xF6]/g,
+      u : /[\xF9-\xFC]/g,
+      c : /\xE7/g,
+      n : /\xF1/g
+    };  
+    for ( var letra in mapaAcentosHex ) {
+      var expressaoRegular = mapaAcentosHex[letra];
+      string = string.replace( expressaoRegular, letra );
+    }  
+    return string;
+  }
+
+  getTextCondition = async(code,is_day)=>{
+    // Buscando o texto da condição, direto no indice do PT-BR da requisição
+    let i;
+    let text;    
+    const texto = await axios.get(urlTexto);
+    for (i = 0; i < 48; i++) {
+      let aux = texto.data[i].code;
+      if (code === aux) {
+        if (is_day === 1) {
+          text = texto.data[i].languages[20].day_text;
+        } else {
+          text = texto.data[i].languages[20].night_text;
+        }
+      }
+    }
+    // Remove acentuação
+    text = this.removeAcent(text.toLowerCase());
+    // Primeira letra de cada palavra maiscula
+    text = text.replace(/\b\w/g, function(l) {
+      return l.toUpperCase();
+    });  
+    return text;
+  }
+
   getWeather = async () => {
+    //Requisição da previsao do tempo
     const retorno = await axios.get(url);
     let text;
-    // dia atual
+    // Inicio dia 01
     let d;
-    d = moment(d).format("DD/MM/YYYY");    
-    console.log(moment(d, 'DD/MM/YYYY').format("dddd"));
+    d = moment(d).format("DD/MM/YYYY");  
     let day0 = moment(d, 'DD/MM/YYYY').format("dddd");
+    day0 = day0+" - "+d;
     let current_temp_c = retorno.data.current.temp_c;
     let wind = retorno.data.current.wind_kph;
     let humidity = retorno.data.current.humidity;
@@ -128,33 +176,15 @@ export default class APP extends Component {
     let sunset = moment(aux_sunset, "h:mm A").format("HH:mm");
     let sunrise = moment(aux_sunrise, "h:mm A").format("HH:mm");
     let moonset = moment(aux_moonset, "h:mm A").format("HH:mm");
+    dirwind = this.convertWind(dirwind);
+    text = await this.getTextCondition(code,is_day);   
+    // Fim dia 01
 
-    dirwind = this.converte(dirwind);
-    let i;
-    const texto = await axios.get(urlTexto);
-
-    for (i = 0; i < 48; i++) {
-      let aux = texto.data[i].code;
-
-      if (code === aux) {
-        if (is_day === 1) {
-          text = texto.data[i].languages[20].day_text;
-        } else {
-          text = texto.data[i].languages[20].night_text;
-        }
-      }
-    }
-
-    text = text.replace(/\b\w/g, function(l) {
-      return l.toUpperCase();
-    });
-
-    // dia 02
-
+    // Inicio dia 02
     d = moment([]);
     d.add(1, "days");
     d = moment(d).format("DD/MM/YYYY");
-    let day1 = "AMANHÃ -" + d;
+    let day1 =moment(d, 'DD/MM/YYYY').format("dddd")+" - "+d;
     let icon_2 = retorno.data.forecast.forecastday[1].day.condition.icon;
     let max_temp_2 = retorno.data.forecast.forecastday[1].day.maxtemp_c;
     let min_temp_2 = retorno.data.forecast.forecastday[1].day.mintemp_c;
@@ -163,23 +193,15 @@ export default class APP extends Component {
     let code_2 = retorno.data.forecast.forecastday[1].day.condition.code;
     let sunset_2 = moment(aux_sunset_2, "h:mm A").format("HH:mm");
     let sunrise_2 = moment(aux_sunrise_2, "h:mm A").format("HH:mm");
-
     let text_2;
-    for (i = 0; i < 48; i++) {
-      let aux = texto.data[i].code;
-      if (code_2 === aux) {
-        text_2 = texto.data[i].languages[20].day_text;
-      }
-    }
-    text_2 = text_2.replace(/\b\w/g, function(l) {
-      return l;
-    });
+    text_2= await this.getTextCondition(code_2,1);    
+    // Fim dia 02
 
-    // dia 03
+    // Inicio dia 03
     d = moment([]);
     d.add(2, "days");
     d = moment(d).format("DD/MM/YYYY");
-    let day2 = d;
+    let day2 = moment(d, 'DD/MM/YYYY').format("dddd")+" - "+d;
     let icon_3 = retorno.data.forecast.forecastday[2].day.condition.icon;
     let max_temp_3 = retorno.data.forecast.forecastday[2].day.maxtemp_c;
     let min_temp_3 = retorno.data.forecast.forecastday[2].day.mintemp_c;
@@ -188,23 +210,15 @@ export default class APP extends Component {
     let code_3 = retorno.data.forecast.forecastday[2].day.condition.code;
     let sunset_3 = moment(aux_sunset_3, "h:mm A").format("HH:mm");
     let sunrise_3 = moment(aux_sunrise_3, "h:mm A").format("HH:mm");
-
     let text_3;
-    for (i = 0; i < 48; i++) {
-      let aux = texto.data[i].code;
-      if (code_3 === aux) {
-        text_3 = texto.data[i].languages[20].day_text;
-      }
-    }
-    text_3 = text_3.replace(/\b\w/g, function(l) {
-      return l.toUpperCase();
-    });
+    text_3= await this.getTextCondition(code_3,1);
+    // Fim dia 03
 
-    // dia 04
+    // Inicio dia 04
     d = moment([]);
     d.add(3, "days");
     d = moment(d).format("DD/MM/YYYY");
-    let day3 = d;
+    let day3 = moment(d, 'DD/MM/YYYY').format("dddd")+" - "+d;
     let icon_4 = retorno.data.forecast.forecastday[3].day.condition.icon;
     let max_temp_4 = retorno.data.forecast.forecastday[3].day.maxtemp_c;
     let min_temp_4 = retorno.data.forecast.forecastday[3].day.mintemp_c;
@@ -213,18 +227,11 @@ export default class APP extends Component {
     let code_4 = retorno.data.forecast.forecastday[3].day.condition.code;
     let sunset_4 = moment(aux_sunset_4, "h:mm A").format("HH:mm");
     let sunrise_4 = moment(aux_sunrise_4, "h:mm A").format("HH:mm");
-
     let text_4;
-    for (i = 0; i < 48; i++) {
-      let aux = texto.data[i].code;
-      if (code_4 === aux) {
-        text_4 = texto.data[i].languages[20].day_text;
-      }
-    }
-    text_4 = text_4.replace(/\b\w/g, function(l) {
-      return l.toUpperCase();
-    });
-
+    text_4 = await this.getTextCondition(code_4,1);    
+    // Fim dia 04
+    
+    // Setando os estados do dia 01
     this.setState({
       weatherCurrent: {
         current_temp_c,
@@ -247,6 +254,7 @@ export default class APP extends Component {
       }
     });
 
+    // Setando os estados do dia 02
     this.setState({
       weatherOne: {
         icone: icon_2,
@@ -260,6 +268,7 @@ export default class APP extends Component {
       }
     });
 
+    // Setando os estados do dia 03
     this.setState({
       weatherTwo: {
         icone: icon_3,
@@ -273,6 +282,7 @@ export default class APP extends Component {
       }
     });
 
+    // Setando os estados do dia 04
     this.setState({
       weatherThree: {
         icone: icon_4,
@@ -284,9 +294,10 @@ export default class APP extends Component {
         text: text_4,
         data: day3
       }
-    });
-  };
+    });    
+  };  
 
+  // Método react invocado após componente ser montado
   componentDidMount() {
     this.getData();
     this.getWeather();
@@ -298,12 +309,9 @@ export default class APP extends Component {
     clearInterval(intervalID);
   }
 
-  clicado = e => {
-    console.log(e.target.value);
-  };
-
+  // Método que renderiza a pagina
   render() {
-    return (
+    return (      
       <div className="card bg-white text-black">
         <div className="row font-weight-bold no-gutters">
           <CardAtual weatherCurrent={this.state.weatherCurrent} onClick={this.clicado} />

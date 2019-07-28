@@ -3,7 +3,7 @@ import React from "react";
 const CardMoney = props => {
   return (
 
-    <div className="card bg-ligth col-md-5" style={{ width: "18rem", border: "none",marginRight:'150px' }}>
+    <div className="card bg-ligth col-md-5" style={{ width: "18rem", border: "none",marginRight:'50px' }}>
       <img src="./logo.png" className="card-img-top" alt="..." />
       <div className="card-body">
         <div className="card-text">
