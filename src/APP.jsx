@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
-import CardAtual from "./Components/cardAtual";
-import CardMoney from "./Components/cardMoney";
-import CardForecast from "./Components/cardForecast";
+import CardAtual from "./components/cardAtual";
+import CardMoney from "./components/cardMoney";
+import CardForecast from "./components/cardForecast";
 import moment from "moment";
 import 'moment/min/locales';
 
