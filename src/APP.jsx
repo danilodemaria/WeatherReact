@@ -55,7 +55,7 @@ export default class APP extends Component {
     let dolar = retorno.data.results.currencies.USD.buy.toLocaleString("pt-BR", formato);
     let euro = retorno.data.results.currencies.EUR.buy.toLocaleString("pt-BR", formato);
     let peso = retorno.data.results.currencies.ARS.buy.toLocaleString("pt-BR", formato);
-    let bitcoin = retorno.data.results.currencies.BTC.buy.toLocaleString("pt-BR", formato);
+    let bitcoin = retorno.data.results.bitcoin.mercadobitcoin.buy.toLocaleString("pt-BR", formato);
     let ibovespa = retorno.data.results.stocks.IBOVESPA.points;
     this.setState({ dolar, euro, peso, bitcoin, ibovespa });
   };
