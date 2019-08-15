@@ -7,6 +7,7 @@ import moment from "moment";
 import 'moment/min/locales';
 
 let intervalID = 0;
+let contAtualiza = -1;
 let keyMoney = "c55e6599";
 let keyWeather = "3cb2d33176324796985133100191402";
 let url = "http://api.apixu.com/v1/forecast.json?key="+keyWeather+"&q=-27.192396,-48.498516&days=4";
@@ -24,7 +25,7 @@ export default class APP extends Component {
     bitcoin: 0,
     ibovespa: 0,
     hora: 0,
-    texto: 0,
+    texto: 0,    
     weatherCurrent: {},
     weatherOne: {},
     weatherTwo: {},
@@ -45,7 +46,7 @@ export default class APP extends Component {
     //Atualiza dados monetários e tempo a cada 30 minutos
     intervalID = setInterval(async () => {
       this.getData();
-      this.getWeather();
+      this.getWeather();      
     }, 1000 * 60 * 30);
   };
 
@@ -151,7 +152,7 @@ export default class APP extends Component {
     d = moment(d).format("DD/MM/YYYY");  
     let day0 = moment(d, 'DD/MM/YYYY').format("dddd");
     day0 = day0+" - "+d;
-    let current_temp_c = retorno.data.current.temp_c;
+    let current_temp_c = retorno.data.current.temp_c ;    
     let wind = retorno.data.current.wind_kph;
     let humidity = retorno.data.current.humidity;
     let feels = retorno.data.current.feelslike_c;
@@ -177,7 +178,8 @@ export default class APP extends Component {
     let sunrise = moment(aux_sunrise, "h:mm A").format("HH:mm");
     let moonset = moment(aux_moonset, "h:mm A").format("HH:mm");
     dirwind = this.convertWind(dirwind);
-    text = await this.getTextCondition(code,is_day);   
+    text = await this.getTextCondition(code,is_day);
+    contAtualiza = contAtualiza + 1;     
     // Fim dia 01
 
     // Inicio dia 02
@@ -230,10 +232,9 @@ export default class APP extends Component {
     let text_4;
     text_4 = await this.getTextCondition(code_4,1);    
     // Fim dia 04
-    
     // Setando os estados do dia 01
     this.setState({
-      weatherCurrent: {
+      weatherCurrent: {       
         current_temp_c,
         wind,
         humidity,
@@ -250,7 +251,8 @@ export default class APP extends Component {
         moonset,
         moonrise,
         is_day,
-        data: day0
+        data: day0,
+        atualiza : contAtualiza
       }
     });
 

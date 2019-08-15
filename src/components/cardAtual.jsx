@@ -35,7 +35,7 @@ export default function CardAtual(props) {
         </div>
         <h3>
           <span className="btn btn-outline-dark" style={{ fontWeight: "bold" }}>
-            Mín {props.weatherCurrent.max_temp}°C - Máx {props.weatherCurrent.min_temp}°C - Sensação {props.weatherCurrent.feels}°C
+            Máx {props.weatherCurrent.max_temp}°C - Min {props.weatherCurrent.min_temp}°C - Sensação {props.weatherCurrent.feels}°C
           </span>
         </h3>
         <h3>
@@ -56,6 +56,10 @@ export default function CardAtual(props) {
         <p className="card-text">
           <small className="text-muted" style={{ fontWeight: "bold" }}>
             Última Atualização {props.weatherCurrent.date_refresh}
+          </small>
+          <br></br>
+          <small className="text-muted" style={{ fontWeight: "bold" }}>
+            Nº Atualizações {props.weatherCurrent.atualiza}
           </small>
         </p>
       </div>
