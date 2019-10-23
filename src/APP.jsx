@@ -290,8 +290,9 @@ export default class APP extends Component {
     return (      
       <div className="card bg-white text-black">
         <div className="row font-weight-bold no-gutters">
+        <CardMoney geral={this.state} />
           <CardAtual weatherCurrent={this.state.weatherCurrent} onClick={this.clicado} />
-          <CardMoney geral={this.state} />
+         
         </div>
         <div className="row" style={{ marginLeft: "0px", marginRight: "0px", lineHeight: "$lh" }}>
           <CardForecast weatherOne={this.state.weatherOne} />
