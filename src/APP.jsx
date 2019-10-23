@@ -75,7 +75,7 @@ export default class APP extends Component {
     setInterval(() => {
       let d = new Date();
       d = d.toLocaleTimeString() ;      
-      d = moment().format("HH:mm");       
+      d = moment().format("HH:mm:ss");       
       this.setState({ hora: d});
     }, 1000);
   };
